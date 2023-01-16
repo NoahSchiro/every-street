@@ -58,7 +58,6 @@ def looking_at_ways(dom):
 		print(i)
 
 
-
 if __name__ == "__main__":
 
 	data = parse("../data/selinsgrove.osm")
