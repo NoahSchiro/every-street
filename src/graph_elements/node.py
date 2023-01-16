@@ -15,8 +15,8 @@ class Node():
 
 		# Collect items of interest
 		iden = elem.getAttribute("id") 
-		lat  = elem.getAttribute("lat")
-		lon  = elem.getAttribute("lon")
+		lat  = float(elem.getAttribute("lat"))
+		lon  = float(elem.getAttribute("lon"))
 
 		# Make sure everything worked	
 		if iden == None:
