@@ -35,7 +35,7 @@ def looking_at_ways(dom):
 
 	# This will just find North Market Street
 	for way in ways:
-		if way.getAttribute("id") == "477217061":
+		if way.getAttribute("id") == "12044628":
 			node_list = way.getElementsByTagName("nd")
 
 	# Collect the nodes that this way is associated with
@@ -74,8 +74,7 @@ def check_valid_ways(dom):
 		if len(nds) < 2:
 			print("Error. Check out way {}".format(iden))
 
-
 if __name__ == "__main__":
 
 	data = parse("../data/selinsgrove.osm")
-	check_valid_ways(data)
+	looking_at_ways(data)

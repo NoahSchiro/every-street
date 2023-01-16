@@ -9,8 +9,20 @@ import edge
 
 class Graph():
 
-	# A graph is always just a list of nodes and edges
+	# A graph is going to just be a list of nodes and edges
 	def __init__(self):
 
 		self.nodes = []
 		self.edges = []
+
+	def add_node(self, elem):
+		nodes.append(Node(elem))
+		
+	def add_node(self, node):
+		nodes.append(node)
+
+	def add_edge(self, n1, n2):
+		edges.append(Edge(n1, n2))
+
+	def add_edge(self, edge):
+		edges.append(edge)
