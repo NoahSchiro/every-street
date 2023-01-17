@@ -16,3 +16,23 @@ The feature that interests this project the most is the "export" feature. It's i
 In the example above, you can see we are trying to select San Francisco. There are some issues with this, namely that we can only draw a rectangular box. Because of this, we are clipping into Alcatraz Island a bit in the upper right side. Because of this, we are going to have to do some (manually) processing to clean up the file we export.
 
 Clicking export will generate a .osm file. These are an extension on the XML format, and should be painless to parse because of that. This file type is covered by a unique license, the [ODbL](https://opendatacommons.org/licenses/odbl/1-0/). Because this repo is covered under the GPL, I will not include any .osm files, but if you clone this repo, they are generally stored in "./data/". If you are interested in learning more about the .osm file format (which will be important for parsing it into a graph), more information can be found [here](https://wiki.openstreetmap.org/wiki/OSM_XML).
+
+There are a few paths that need to be removed which are not "streets"
+
+- Anything that doesn't have the tag with key value "highway." Even with the "highway" key, there are some values we want to pay attention to and some we don't want to pay attention to
+	- Save
+		- primary_link
+		- secondary
+		- motorway_link
+		- service 
+		- residential
+		- motorway
+		- unclassified (a fun category. I am sure this will cause headaches later)
+		- primary
+		- tertiary
+	- Don't save 
+		- footway
+		- raceway
+		- path
+
+If you are trying this for your own city, you might want to try and see if your .osm file has any tag values which are not listed here. I am sure that there might be more weird features in this file format which might not be covered above.
