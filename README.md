@@ -34,5 +34,6 @@ There are a few paths that need to be removed which are not "streets"
 		- footway
 		- raceway
 		- path
+- Anything that has the tag key-value pair "access" -> "private." We aren't keen to go anywhere we are not supposed to!
 
 If you are trying this for your own city, you might want to try and see if your .osm file has any tag values which are not listed here. I am sure that there might be more weird features in this file format which might not be covered above.
