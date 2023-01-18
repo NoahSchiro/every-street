@@ -121,7 +121,7 @@ def check_way_tag_types(dom):
 if __name__ == "__main__":
 
 	data = parse("../data/selinsgrove.osm")
-	check_a_way(data, "12044628")
+	check_a_way(data, "918721924")
 
 	# check_way_tag_types(data)
 
