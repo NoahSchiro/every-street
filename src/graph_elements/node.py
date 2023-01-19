@@ -5,7 +5,6 @@ for now, this is just the id number, the
 latitude and longitude (which is normally
 represented as a 2-tuple). 
 """
-
 from xml.dom.minidom import parseString # This is primarily for testing
 
 class Node():

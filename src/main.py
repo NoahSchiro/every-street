@@ -1,4 +1,5 @@
 from xml.dom.minidom import parse
+from graph_elements.graph import Graph
 
 # Ways is passed in as the [minidom.Element] 
 # Returns a list of way elements we care about [minidom.Element]
@@ -76,39 +77,15 @@ if __name__=="__main__":
 	way_elems = list(dom.getElementsByTagName("way"))
 	node_elems = list(dom.getElementsByTagName("node"))
 
-	num_ways_before  = len(way_elems)
-	num_nodes_before = len(node_elems)
-
 	# Filter the ways and nodes to the ones we care about
 	way_elems = filter_ways(way_elems)
 	node_elems = filter_nodes(node_elems, way_elems)
 
-	num_ways_after  = len(way_elems)
-	num_nodes_after = len(node_elems)
+	# Create the graph
+	g = Graph()
 
-	print("Ways before: {}\nWays after: {}".format(num_ways_before, num_ways_after))
-	print("Nodes before: {}\nNodes after: {}".format(num_nodes_before, num_nodes_after))
+	# Now that we have the data in a convenient form, parse it into the graph
+	for elem in node_elems:
+		g.add_node(elem)
 
-"""
-# With each way, we want to gather
-# nodes associated with those ways
-# We can collect them in a set
-node_ids = set()
-
-# For each way
-for elem in way_elems:
-
-	# Get the nodes connected to this way
-	way_nds = elem.getElementsByTagName("nd")
-
-	# For each one of those nodes, get the id, find where that node is in the xml file
-	for way_nd in way_nds:
-
-		node_ids.add(int(way_nd.getAttribute("ref")))
-
-# Now that we have all the ways we care about and a reference
-# ID to the nodes we care about, let's go collect the node elements
-print(len(node_elems))
-node_elems = list(filter(lambda x: x.getAttribute("id") not in node_ids, node_elems))
-print(len(node_elems))
-"""
+	print(g)
