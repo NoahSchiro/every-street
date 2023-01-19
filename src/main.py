@@ -1,5 +1,6 @@
 from xml.dom.minidom import parse
 from graph_elements.graph import Graph
+from math import radians, cos, sin, asin, sqrt
 
 # Ways is passed in as the [minidom.Element] 
 # Returns a list of way elements we care about [minidom.Element]
@@ -66,7 +67,23 @@ def filter_nodes(node_elems, way_elems):
 	# Now we can go through all the nodes and only return the ones in the set
 	return list(filter(lambda x : int(x.getAttribute("id")) in node_ids, node_elems))
 
+# Compute the distance between two coordinates
+def haversine(lat_lon1, lat_lon2):
 
+	# Radius of the earth
+    R = 6372.8
+
+    # Delta on the lat / lon
+    dLat = radians(lat_lon2[0] - lat_lon1[0])
+    dLon = radians(lat_lon2[1] - lat_lon1[1])
+
+    lat1 = radians(lat_lon1[0])
+    lat2 = radians(lat_lon2[0])
+
+    a = sin(dLat/2)**2 + cos(lat1)*cos(lat2)*sin(dLon/2)**2
+    c = 2*asin(sqrt(a))
+
+    return R * c * 1000
 
 if __name__=="__main__":
 
@@ -88,4 +105,9 @@ if __name__=="__main__":
 	for elem in node_elems:
 		g.add_node(elem)
 
-	print(g)
+	n1 = g.nodes[0].lat_lon
+	n2 = g.nodes[1].lat_lon
+
+	print(n1)
+	print(n2)
+	print(haversine(n1,n2))

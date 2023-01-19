@@ -3,7 +3,7 @@ Simple edge element
 """
 from xml.dom.minidom import parseString # This is primarily for testing
 from math import sin, cos, sqrt, atan2, radians
-from node import Node
+from graph_elements.node import Node
 
 class Edge():
 

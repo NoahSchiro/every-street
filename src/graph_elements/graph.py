@@ -4,24 +4,23 @@ that we can create the concept of a weight. For nodes, we really
 only care about the id, lat, and lon, so we can just use the same
 node that is generated from the osm file.
 """
+from graph_elements.node import Node
+from graph_elements.edge import Edge
 
 class Graph():
 
 	# A graph is going to just be a list of nodes and edges
 	def __init__(self):
 
-		self.nodes = set()
-		self.edges = set()
+		self.nodes = []
+		self.edges = []
 
 	def add_node(self, elem):
-		self.nodes.add(Node(elem))
+		self.nodes.append(Node(elem))
 		
-	def add_node(self, node):
-		self.nodes.add(node)
-
 	def add_edge(self, n1, n2):
 		if n1 in self.nodes and n2 in self.nodes:
-			self.edges.add(Edge(n1, n2))
+			self.edges.append(Edge(n1, n2))
 		else:
 			print("Error: node does not exist in graph")
 
