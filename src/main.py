@@ -2,6 +2,11 @@ from xml.dom.minidom import parse
 from graph_elements.graph import Graph
 from math import radians, cos, sin, asin, sqrt
 
+###################### VISUALIZATION #########################
+import networkx as nx
+import matplotlib.pyplot as plt
+###################### VISUALIZATION #########################
+
 # Ways is passed in as the [minidom.Element] 
 # Returns a list of way elements we care about [minidom.Element]
 def filter_ways(ways):
@@ -105,9 +110,60 @@ if __name__=="__main__":
 	for elem in node_elems:
 		g.add_node(elem)
 
-	n1 = g.nodes[0].lat_lon
-	n2 = g.nodes[1].lat_lon
+	# Adding ways is a lot more complicated
+	# For each way,
+	for elem in way_elems:
+		
+		# Get the nd_tags
+		nd_tags = list(elem.getElementsByTagName("nd"))
+		
+		# Get the IDs off of those tags
+		node_ids = list(map(lambda x: int(x.getAttribute("ref")), nd_tags))
+		
+		# Now we want to find where those nodes are in our
+		# graph structure. We can store their indexes into a list
+		node_indexes = []
+		for i in range(len(g.nodes)):
+			if g.nodes[i].iden in node_ids:
+				node_indexes.append(i)
 
-	print(n1)
-	print(n2)
-	print(haversine(n1,n2))
+		# Now we loop through our list of nodes, and link them up one by one
+		for i in range(len(node_indexes)):
+
+			# If we are at the last index, no connection needs to be made
+			if i == len(node_indexes)-1:
+				pass
+			else:
+				g.add_edge(g.nodes[node_indexes[i]], g.nodes[node_indexes[i+1]])
+				
+	###################### VISUALIZATION #########################
+
+	options = {
+	    'node_color': 'black',
+	    'node_size': 3,
+	    'width': 1,
+	}
+
+	# NetworkX graph
+	nxg = nx.Graph()
+
+	# Create a dictionary of node IDs to their position
+	node_pos = {}
+
+	# Add the nodes to the dictionary 
+	for node in g.nodes:
+		node_pos[node.iden] = [node.lat_lon[0], node.lat_lon[1]]
+
+	# Add nodes to the graph
+	nxg.add_nodes_from([node.iden for node in g.nodes])
+
+	# Add the edges to the graph
+	for edge in g.edges:
+		nxg.add_edge(edge.n1.iden, edge.n2.iden)
+
+
+	nx.draw_networkx(nxg, node_pos, with_labels=False, **options)
+	plt.show()
+
+
+	###################### VISUALIZATION #########################

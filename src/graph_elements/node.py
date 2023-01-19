@@ -13,7 +13,7 @@ class Node():
 	def __init__(self, elem):
 
 		# Collect items of interest
-		iden = elem.getAttribute("id") 
+		iden = int(elem.getAttribute("id"))
 		lat  = float(elem.getAttribute("lat"))
 		lon  = float(elem.getAttribute("lon"))
 
