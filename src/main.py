@@ -1,7 +1,7 @@
 from xml.dom.minidom import parse 				# Parses .osm doc
 from graph_elements.graph import Graph 			# Graph object
 from parsing import filter_ways, filter_nodes	# Extra post processing on .osm
-from graph_elements.utils import kruskal		# Extra post processing on .osm 
+from graph_elements.utils import *				# Extra post processing on .osm 
 from visualization import display_graph			# Visualize the graph
 from time import time							# Benchmarking
 from math import floor							# Benchmarking
@@ -29,6 +29,9 @@ if __name__=="__main__":
 	# Now that we have the data in a convenient form, parse it into the graph
 	for elem in node_elems:
 		g.add_node(elem)
+
+	# Remove the node if it's not in the polygon of selinsgrove
+	point_in_polygon(g, "../data/selinsgrove_boundary.txt")
 	stop = time()
 	print("Added {} nodes in {} milliseconds".format(len(g.nodes), floor((stop - start)*1000.0)))
 
@@ -42,6 +45,7 @@ if __name__=="__main__":
 		
 		# Get the IDs off of those tags
 		node_ids = list(map(lambda x: int(x.getAttribute("ref")), nd_tags))
+		node_ids = list(filter(lambda x: x in [y.iden for y in g.nodes], node_ids))
 		
 		# Collect the nodes in our graph
 		# structure that pertain to this way
@@ -60,4 +64,5 @@ if __name__=="__main__":
 
 	stop = time()
 	print("Added {} ways in {} milliseconds".format(len(g.edges), floor((stop - start)*1000.0)))
+
 	display_graph(g)
