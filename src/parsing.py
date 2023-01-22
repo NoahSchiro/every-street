@@ -1,27 +1,69 @@
 from xml.dom.minidom import parse
 
-def looking_at_tags(dom):
+# Ways is passed in as the [minidom.Element] 
+# Returns a list of way elements we care about [minidom.Element]
+def filter_ways(ways):
 
-	# Gather all of the node objects
-	nodes = dom.getElementsByTagName("node")
+	# These are tag values which are either
+	# 1. Not a road
+	# 2. Illegal to ride a bike on
+	bad_highway_values = ["footway", "raceway", "path"]
+	bad_service_vales = ["parking_aisle", "driveway", "emergency_access"]
 
-	# For now, I just want to see what kind of "keys" are
-	# in nodes, so we will create a set to gather them
-	key_values = set()
+	# Accumulator for the ways that we care about
+	good_ways = []
 
-	# Go through all of the nodes
-	for node in nodes:
+	# Eliminate ways which are not related to streets.
+	for way in ways:
 
-		# Go through all of the tags in the nodes
-		tags = node.getElementsByTagName("tag")
+		# Flag
+		keep = False
+		tags = way.getElementsByTagName("tag")
 
+		# For each tag, make sure that it:
 		for tag in tags:
+			
+			key   = tag.getAttribute("k")
+			value = tag.getAttribute("v")
 
-			key_values.add(tag.getAttribute("k"))
+			# 1. Has a highway tag (but doesn't have bad values of highway)
+			if key == "highway" and value not in bad_highway_values:
+				keep = True
 
-	# Print the set of keys
-	for key in key_values:
-		print(key)
+			# 2. Is not a private drive
+			if key == "access" and value == "private":
+				keep = False
+				break
+
+			# 3. Does not have a service tag that has bad values
+			if key == "service" and value in bad_service_vales:
+				keep = False
+				break
+
+		# Add to our list if the flag is still true
+		if keep:
+			good_ways.append(way)
+
+	# Return accumulator
+	return good_ways
+
+def filter_nodes(node_elems, way_elems):
+
+	# Accumulator for the nodes of interest
+	node_ids = set()
+
+	# Go through all of the ways
+	for way in way_elems:
+
+		# Go through all the references to nodes
+		# and add the IDs to the accumulator
+		nds = way.getElementsByTagName("nd")
+
+		for nd in nds:
+			node_ids.add(int(nd.getAttribute("ref")))
+
+	# Now we can go through all the nodes and only return the ones in the set
+	return list(filter(lambda x : int(x.getAttribute("id")) in node_ids, node_elems))
 
 def check_a_way(dom, way_id):
 
@@ -60,64 +102,6 @@ def check_a_way(dom, way_id):
 
 	for i in lat_lon:
 		print(i)
-
-# The documentation noted that all ways should have >= 2 nd tags. Let's make sure.
-def check_valid_ways(dom):
-
-	ways = dom.getElementsByTagName("way")
-
-	for way in ways:
-		iden = way.getAttribute("id")
-		nds  = way.getElementsByTagName("nd")
-
-		if len(nds) < 2:
-			print("Error. Check out way {}".format(iden))
-
-def how_many_nodes(dom):
-
-	ways = dom.getElementsByTagName("way")
-
-	all_node_ids = set()
-
-	for way in ways:
-		nds = way.getElementsByTagName("nd")
-		for nd in nds:
-			node_id = int(nd.getAttribute("ref"))
-			all_node_ids.add(node_id)
-
-	print(len(all_node_ids))
-
-def how_many_edges(dom):
-
-	ways = dom.getElementsByTagName("way")
-
-	acc = 0
-
-	for way in ways:
-		nds = way.getElementsByTagName("nd")
-		acc += len(nds)
-
-	print(acc)
-
-def check_way_tag_types(dom):
-
-	ways = dom.getElementsByTagName("way")
-
-	tag_values = set()
-
-	# Get all tags from all ways
-	for way in ways:
-		all_tags = way.getElementsByTagName("tag")
-
-		# For each tag, if it is the highway tag
-		for tag in all_tags:
-			if tag.getAttribute("k") == "highway":
-				tag_values.add(tag.getAttribute("v"))
-
-	for value in tag_values:
-		print(value)
-
-
 if __name__ == "__main__":
 
 	data = parse("../data/selinsgrove.osm")
