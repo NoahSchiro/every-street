@@ -64,5 +64,6 @@ if __name__=="__main__":
 
 	stop = time()
 	print("Added {} ways in {} milliseconds".format(len(g.edges), floor((stop - start)*1000.0)))
-
-	display_graph(g)
+	
+	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
+	#display_graph(g)

@@ -13,20 +13,20 @@ class Edge():
 		self.n1 = n1
 		self.n2 = n2
 
-		self.weight = self.compute_distance(n1.lat_lon, n2.lat_lon)
+		self.weight = self.compute_distance()
 
 	# Basic haversine computation for two given lat and lons
 	# All units in meters
-	def compute_distance(self, c1, c2):
+	def compute_distance(self):
 
 		# Earth radius (roughly) 
 		R = 6373.0
 
 		# Extract data from the tuples
-		lat1 = radians(c1[0])
-		lon1 = radians(c1[1])
-		lat2 = radians(c2[0])
-		lon2 = radians(c2[1])
+		lat1 = radians(self.n1.lat_lon[0])
+		lon1 = radians(self.n1.lat_lon[1])
+		lat2 = radians(self.n2.lat_lon[0])
+		lon2 = radians(self.n2.lat_lon[1])
 
 		# Compute the delta on the lats and lon
 		dlat = lat2 - lat1
@@ -56,7 +56,3 @@ if __name__ == "__main__":
 	nodes = []
 	for node in nodes_as_elem:
 		nodes.append(Node(node))
-
-	e1 = Edge(nodes[0], nodes[1])
-	print(e1.weight)
-	e2 = Edge(nodes[1], nodes[2])

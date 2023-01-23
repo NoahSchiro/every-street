@@ -24,5 +24,14 @@ class Graph():
 		else:
 			print("Error: node does not exist in graph")
 
+	# Compute the length of every street
+	def get_length(self):
+
+		accumulator = 0
+		for edge in self.edges:
+			accumulator += edge.compute_distance()
+
+		return accumulator
+
 	def __str__(self):
 		return "({}, {})".format(len(self.nodes), len(self.edges))
