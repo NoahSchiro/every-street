@@ -10,7 +10,7 @@ if __name__=="__main__":
 
 	start = time()	
 	# Move the xml file into DOM
-	dom = parse("../data/selinsgrove.osm")
+	dom = parse("../data/s2.osm")
 	stop = time()
 	print("Parsed .osm in {} milliseconds".format(floor((stop - start)*1000.0)))
 
@@ -64,6 +64,7 @@ if __name__=="__main__":
 
 	stop = time()
 	print("Added {} ways in {} milliseconds".format(len(g.edges), floor((stop - start)*1000.0)))
-	
+
 	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
-	#display_graph(g)
+	
+	display_graph(g)
