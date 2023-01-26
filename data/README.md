@@ -24,9 +24,10 @@ There are a few paths that need to be removed which are not "streets"
 		- primary
 		- tertiary
 	- Don't save 
-		- footway
-		- raceway
-		- path
+		- footway (not a road)
+		- raceway (not a road)
+		- path (not a road)
+		- motorway (a highway, often illegal to ride bikes here)
 - Anything that has the tag key-value pair "access" -> "private." or "service" -> "driveway". We aren't keen to go anywhere we are not supposed to!
 - Anything that has the tag key value of "service" may not have
 	- parking_aisle

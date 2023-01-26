@@ -7,7 +7,7 @@ def filter_ways(ways):
 	# These are tag values which are either
 	# 1. Not a road
 	# 2. Illegal to ride a bike on
-	bad_highway_values = ["footway", "raceway", "path"]
+	bad_highway_values = ["footway", "raceway", "path", "motorway"]
 	bad_service_vales = ["parking_aisle", "driveway", "emergency_access"]
 
 	# Accumulator for the ways that we care about

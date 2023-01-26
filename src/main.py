@@ -67,4 +67,14 @@ if __name__=="__main__":
 
 	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
 	
-	display_graph(g)
+	# Floyd warshall will give us a lookup table where we
+	# can give it two nodes we want the shortest path
+	# to and it will return the shortest path
+	start = time()
+	next_nodes = floyd_warshall(g)
+	stop = time()
+	print("Computed all shortest paths in {} milliseconds".format(floor((stop - start)*1000.0)))
+
+
+
+	#display_graph(g)
