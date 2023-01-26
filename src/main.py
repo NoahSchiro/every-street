@@ -19,7 +19,7 @@ if __name__=="__main__":
 	node_elems = list(dom.getElementsByTagName("node"))
 
 	# Filter the ways and nodes to the ones we care about
-	way_elems = filter_ways(way_elems)
+	way_elems  = filter_ways(way_elems)
 	node_elems = filter_nodes(node_elems, way_elems)
 
 	# Create the graph
@@ -67,14 +67,4 @@ if __name__=="__main__":
 
 	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
 	
-	# Floyd warshall will give us a lookup table where we
-	# can give it two nodes we want the shortest path
-	# to and it will return the shortest path
-	start = time()
-	next_nodes = floyd_warshall(g)
-	stop = time()
-	print("Computed all shortest paths in {} milliseconds".format(floor((stop - start)*1000.0)))
-
-
-
-	#display_graph(g)
+	display_graph(g)

@@ -130,6 +130,8 @@ def point_in_polygon(g, file):
 	plt.show()
 	"""
 
-if __name__=="__main__":
+def dijkstra():
+	pass
 
-	point_in_polygon([], "selinsgrove_boundary.txt")
+def make_euler_graph(g):
+	pass

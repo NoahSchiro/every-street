@@ -17,9 +17,7 @@ There are a few paths that need to be removed which are not "streets"
 		- primary_link
 		- secondary
 		- motorway_link
-		- service 
 		- residential
-		- motorway
 		- unclassified (a fun category. I am sure this will cause headaches later)
 		- primary
 		- tertiary
@@ -28,6 +26,8 @@ There are a few paths that need to be removed which are not "streets"
 		- raceway (not a road)
 		- path (not a road)
 		- motorway (a highway, often illegal to ride bikes here)
+		- motorway_junction (a highway, often illegal to ride bikes here)
+		- service (not a road)
 - Anything that has the tag key-value pair "access" -> "private." or "service" -> "driveway". We aren't keen to go anywhere we are not supposed to!
 - Anything that has the tag key value of "service" may not have
 	- parking_aisle
