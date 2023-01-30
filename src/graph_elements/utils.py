@@ -3,6 +3,39 @@ from math import radians, cos, sin, asin, sqrt
 from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from collections import defaultdict
+import heapq as heap
+
+def insort_right(a, x, lo=0, hi=None, *, key=None):
+    
+    if key is None:
+        lo = bisect_right(a, x, lo, hi)
+    else:
+        lo = bisect_right(a, key(x), lo, hi, key=key)
+    a.insert(lo, x)
+
+
+def bisect_right(a, x, lo=0, hi=None, *, key=None):
+    
+    if lo < 0:
+        raise ValueError('lo must be non-negative')
+    if hi is None:
+        hi = len(a)
+    if key is None:
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if x < a[mid]:
+                hi = mid
+            else:
+                lo = mid + 1
+    else:
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if x < key(a[mid]):
+                hi = mid
+            else:
+                lo = mid + 1
+    return lo
 
 # Compute the distance between two coordinates
 def haversine(lat_lon1, lat_lon2):
@@ -130,8 +163,92 @@ def point_in_polygon(g, file):
 	plt.show()
 	"""
 
-def dijkstra():
-	pass
+def bfs(G, start, targets):
+	
+	# Queue of nodes to explore
+	queue = []
+
+	# Start the node with the root
+	queue.append((start, 0))
+
+	# Nodes we have already explored
+	explored = set()
+	explored.add(start)
+
+	# For each node, a reference to the "parent" node
+	node_parents = {}
+	node_parents[start] = None
+
+	# Last node we looked at
+	node = (None, 0)
+
+	# While the queue is not empty
+	while queue:
+
+		# Grab the node to be explored and
+		# the distance it took to get there so far
+		node, distance = queue.pop(0)
+
+		# If node happens to
+		# be what we are looking for
+		if node in targets:
+			break
+
+		# [(Node, Absolute weight it takes to get there from start)]
+		adjacent_nodes = []
+
+		for edge in G.edges:
+			if edge.n1 == node:
+				adjacent_nodes.append((edge.n2, distance + edge.weight))
+			if edge.n2 == node:
+				adjacent_nodes.append((edge.n1, distance + edge.weight))
+
+		# Go through adjacent nodes
+		for next_node, weight in adjacent_nodes:
+			# If we have not seen them
+			if next_node not in explored:
+				# Mark them as seen
+				explored.add(next_node)
+				# Mark the parent node as the node before it
+				node_parents[next_node] = node
+				# Insert the node into our queue IN ORDER
+				insort_right(queue, (next_node, weight), key=lambda x: x[1])
+
+	# When this while loop breaks, we should
+	# be able to use the dictionary to
+	# reconstruct the path back
+	path = []
+	path.append(node)
+	while node_parents[node] != None:
+		path.append(node_parents[node])
+		node = node_parents[node]
+
+	return path
+
+
+def find_odd_pairs(g):
+
+	nodes            = g.nodes
+	node_connections = []
+
+	# For each node
+	for node in nodes:
+		
+		# Accumulate the number of connections it has
+		connect = 0
+		for edge in g.edges:
+			if edge.n1 == node or edge.n2 == node:
+				connect += 1
+
+		# Add to list
+		node_connections.append(connect)
+
+	# Figure out which of these nodes is odd
+	odd_nodes = []
+	for i in range(len(node_connections)):
+		if node_connections[i] % 2 != 0:
+			odd_nodes.append(nodes[i])
+
 
 def make_euler_graph(g):
 	pass

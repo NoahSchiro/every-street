@@ -66,5 +66,20 @@ if __name__=="__main__":
 	print("Added {} ways in {} milliseconds".format(len(g.edges), floor((stop - start)*1000.0)))
 
 	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
-	
-	display_graph(g)
+
+	# Node of interest
+	start_node = None
+	end_node = set()
+
+	for node in g.nodes:
+		if node.iden == 108836445:
+			start_node = node
+		if node.iden == 109021470:
+			end_node.add(node)
+
+	path = bfs(g, start_node, end_node)
+	for node in path:
+		lat, lon = node.lat_lon
+		print("({}, {})".format(lat, lon))
+
+	#display_graph(g)

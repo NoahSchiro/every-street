@@ -24,6 +24,34 @@ class Graph():
 		else:
 			print("Error: node does not exist in graph")
 
+	def to_dictionary(self):
+
+		d = {}
+		for i in range(len(self.nodes)):
+			d[i] = []
+
+		edges_as_tuple = []
+		for i in range(len(self.edges)):
+			n1 = self.edges[i].n1
+			n2 = self.edges[i].n2
+			n1_idx = -1
+			n2_idx = -1
+
+			for i in range(len(self.nodes)):
+				if self.nodes[i] == n1:
+					n1_idx = i
+				if self.nodes[i] == n2:
+					n2_idx = i
+
+			edges_as_tuple.append((n1_idx, n2_idx, self.edges[i].weight))
+
+		for edge in edges_as_tuple:
+			d[edge[0]].append((edge[1], edge[2]))
+			d[edge[1]].append((edge[0], edge[2]))
+
+		return d
+
+
 	# Compute the length of every street
 	def get_length(self):
 
