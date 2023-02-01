@@ -67,19 +67,13 @@ if __name__=="__main__":
 
 	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
 
-	# Node of interest
-	start_node = None
-	end_node = set()
+	# Needed modification to the graph to compute the shortest route
+	start = time()
+	make_graph_eulerian(g)
+	stop = time()
+	print("Made graph eulerian in {} milliseconds".format(floor((stop - start)*1000.0)))
 
-	for node in g.nodes:
-		if node.iden == 108836445:
-			start_node = node
-		if node.iden == 109021470:
-			end_node.add(node)
+	# Length of graph after modification
+	print("Length of each edge (after modification: {} kilometers".format(int(g.get_length())/1000))
 
-	path = bfs(g, start_node, end_node)
-	for node in path:
-		lat, lon = node.lat_lon
-		print("({}, {})".format(lat, lon))
-
-	#display_graph(g)
+	display_graph(g)

@@ -148,6 +148,7 @@ def point_in_polygon(g, file):
 	g.nodes = nodes_in_poly
 
 	"""
+	This bit of code will display the polygon if you want
 	codes = [
 	    Path.MOVETO,
 	    Path.LINETO,
@@ -163,6 +164,8 @@ def point_in_polygon(g, file):
 	plt.show()
 	"""
 
+# Accepts a graph, a starting node, and a
+# set of nodes to attempt to reach
 def bfs(G, start, targets):
 	
 	# Queue of nodes to explore
@@ -226,29 +229,44 @@ def bfs(G, start, targets):
 	return path
 
 
-def find_odd_pairs(g):
+def make_graph_eulerian(g):
 
-	nodes            = g.nodes
+	# First we need to collect the off vertices	
 	node_connections = []
 
 	# For each node
-	for node in nodes:
+	for node in g.nodes:
 		
 		# Accumulate the number of connections it has
-		connect = 0
+		connections = 0
 		for edge in g.edges:
 			if edge.n1 == node or edge.n2 == node:
-				connect += 1
+				connections += 1
 
 		# Add to list
-		node_connections.append(connect)
+		node_connections.append((node, connections))
+	
+	# Filter the node connections that are odd, remove the 
+	# number of connections they have, and put them into a set
+	odd_nodes = set(map(lambda x: x[0], filter(lambda x: x[1]%2==1, node_connections)))
 
-	# Figure out which of these nodes is odd
-	odd_nodes = []
-	for i in range(len(node_connections)):
-		if node_connections[i] % 2 != 0:
-			odd_nodes.append(nodes[i])
+	# Now we can iterate through this set, and make new connections.
+	# Once a new connection is made, remove from set
+	while len(odd_nodes) > 0:
+		
+		# Get a random node from the set (and remove this node from the set)
+		start_node = odd_nodes.pop()
+		path_to_target = bfs(g, start_node, odd_nodes)
 
+		# The node at the beginning of the path is the one
+		# we are connection to, so remove that from the set as well
+		odd_nodes.remove(path_to_target[0])
 
-def make_euler_graph(g):
-	pass
+		# Now, for every connection in that path, we need to add it to
+		# the graph. This is effectively duplicating some edges
+		for i in range(len(path_to_target)-1):
+			n1 = path_to_target[i]
+			n2 = path_to_target[i+1]
+			g.add_edge(n1, n2)
+
+	# Graph is now eulerian

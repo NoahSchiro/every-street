@@ -22,7 +22,7 @@ class Graph():
 		if n1 in self.nodes and n2 in self.nodes:
 			self.edges.append(Edge(n1, n2))
 		else:
-			print("Error: node does not exist in graph")
+			raise Exception("Error: node does not exist in graph")
 
 	def to_dictionary(self):
 
