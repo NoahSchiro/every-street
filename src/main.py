@@ -80,4 +80,4 @@ if __name__=="__main__":
 	starting_node = g.nodes[0]
 	path = hierholzer(g.to_node_dictionary(), starting_node)
 
-	#display_graph(g)
+	display_graph(g)
