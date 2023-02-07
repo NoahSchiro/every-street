@@ -51,6 +51,18 @@ class Graph():
 
 		return d
 
+	# A dictionary, but only with nodes referencing other nodes
+	def to_node_dictionary(self):
+	
+		d = {}
+		for node in self.nodes:
+			d[node] = []
+
+		for edge in self.edges:
+			d[edge.n1].append(edge.n2)	
+			d[edge.n2].append(edge.n1)
+
+		return d
 
 	# Compute the length of every street
 	def get_length(self):

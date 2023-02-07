@@ -65,7 +65,7 @@ if __name__=="__main__":
 	stop = time()
 	print("Added {} ways in {} milliseconds".format(len(g.edges), floor((stop - start)*1000.0)))
 
-	print("Length of each edge: {} kilometers".format(int(g.get_length())/1000))
+	print("Length of all edges: {} kilometers".format(int(g.get_length())/1000))
 
 	# Needed modification to the graph to compute the shortest route
 	start = time()
@@ -74,6 +74,10 @@ if __name__=="__main__":
 	print("Made graph eulerian in {} milliseconds".format(floor((stop - start)*1000.0)))
 
 	# Length of graph after modification
-	print("Length of each edge (after modification: {} kilometers".format(int(g.get_length())/1000))
+	print("Length of all edges (after modification): {} kilometers".format(int(g.get_length())/1000))
 
-	display_graph(g)
+	# Generate Eulerian path
+	starting_node = g.nodes[0]
+	path = hierholzer(g.to_node_dictionary(), starting_node)
+
+	#display_graph(g)

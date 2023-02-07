@@ -1,10 +1,6 @@
 from graph_elements.graph import Graph
 from math import radians, cos, sin, asin, sqrt
 from matplotlib.path import Path
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from collections import defaultdict
-import heapq as heap
 
 def insort_right(a, x, lo=0, hi=None, *, key=None):
     
@@ -13,7 +9,6 @@ def insort_right(a, x, lo=0, hi=None, *, key=None):
     else:
         lo = bisect_right(a, key(x), lo, hi, key=key)
     a.insert(lo, x)
-
 
 def bisect_right(a, x, lo=0, hi=None, *, key=None):
     
@@ -228,7 +223,6 @@ def bfs(G, start, targets):
 
 	return path
 
-
 def make_graph_eulerian(g):
 
 	# First we need to collect the off vertices	
@@ -248,7 +242,7 @@ def make_graph_eulerian(g):
 	
 	# Filter the node connections that are odd, remove the 
 	# number of connections they have, and put them into a set
-	odd_nodes = set(map(lambda x: x[0], filter(lambda x: x[1]%2==1, node_connections)))
+	odd_nodes = list(map(lambda x: x[0], filter(lambda x: x[1]%2==1, node_connections)))
 
 	# Now we can iterate through this set, and make new connections.
 	# Once a new connection is made, remove from set
@@ -270,3 +264,44 @@ def make_graph_eulerian(g):
 			g.add_edge(n1, n2)
 
 	# Graph is now eulerian
+
+# Takes a graph (as a dictionary) and generates the
+# Eulerian route (a list of nodes)
+def hierholzer(gd, start_node):
+
+	# Keep a stack of nodes we are searching through
+	stack = [start_node]
+
+	# Path we will generate and return
+	path = []
+	
+	# While we still have nodes to process
+	while len(stack) > 0:
+
+		# Get a node from the stack
+		node =  stack[-1]
+
+		# If the node is not in our graph or it has no
+		# outgoing edges, than we have already discovered
+		# it and we need to backtrack, add it to the list
+		# and continue processing the node that came before it
+		if node not in gd or len(gd[node]) == 0:
+			path.append(node)
+			stack.pop()
+		
+		# If we have not seen this node before, add one of it's
+		# connections to the stack and remove this connection from
+		# our graph dictionary. We have "discovered" this connection
+		# and we don't want to rewalk it.
+		else:
+			stack.append(gd[node][-1])
+
+			# We have to remove the connection from
+			# both parts of the graph!
+			other_node = gd[node].pop()
+			gd[other_node].remove(node)
+
+	# It's possible that this does not need to be done
+	return path
+
+	
