@@ -8,9 +8,16 @@ from math import floor							# Benchmarking
 
 if __name__=="__main__":
 
+	file_location = input(".osm file location: ")
+	
 	start = time()	
 	# Move the xml file into DOM
-	dom = parse("../data/s2.osm")
+	dom = None
+	try:
+		dom = parse(file_location)
+	except:
+		raise Exception("No such file")
+
 	stop = time()
 	print("Parsed .osm in {} milliseconds".format(floor((stop - start)*1000.0)))
 
@@ -30,10 +37,21 @@ if __name__=="__main__":
 	for elem in node_elems:
 		g.add_node(elem)
 
-	# Remove the node if it's not in the polygon of selinsgrove
-	point_in_polygon(g, "../data/selinsgrove_boundary.txt")
 	stop = time()
 	print("Added {} nodes in {} milliseconds".format(len(g.nodes), floor((stop - start)*1000.0)))
+
+	print("Do you have a polygon to clean the data? (highly recommended)")
+	bool_have_ploygon = input("[y/n]: ")
+
+	if bool_have_ploygon == "y":
+		
+		polygon_file_location = input("Polygon file location: ")
+
+		# Remove the node if it's not in the polygon of selinsgrove
+		try:
+			point_in_polygon(g, polygon_file_location)
+		except:
+			raise Exception("No such file")
 
 	start = time()
 	# Adding ways is a lot more complicated
@@ -80,7 +98,19 @@ if __name__=="__main__":
 	starting_node = g.nodes[0]
 	path = hierholzer(g.to_node_dictionary(), starting_node)
 
-	print(len(path))
+	print("Done. How do you want to view the data?")
+	print("1. Show map")
+	print("2. Show heatmap (edges we need to cross multiple times)")
+	print("3. Show route animation")
 
-	#display_graph(g)
-	animate_walk(path)	
+	option = input("input [1/2/3]: ")
+
+	if option == "1":
+		display_graph(g)	
+	elif option == "2":
+		print("This takes a moment...")
+		display_graph(g, heatmap=True)	
+	elif option == "3":
+		animate_walk(path)	
+	else:
+		raise Exception("Not a valid option")
