@@ -2,7 +2,7 @@ from xml.dom.minidom import parse 				# Parses .osm doc
 from graph_elements.graph import Graph 			# Graph object
 from parsing import filter_ways, filter_nodes	# Extra post processing on .osm
 from graph_elements.utils import *				# Extra post processing on .osm 
-from visualization import display_graph			# Visualize the graph
+from visualization import *          			# Visualize the graph
 from time import time							# Benchmarking
 from math import floor							# Benchmarking
 
@@ -80,4 +80,7 @@ if __name__=="__main__":
 	starting_node = g.nodes[0]
 	path = hierholzer(g.to_node_dictionary(), starting_node)
 
-	display_graph(g)
+	print(len(path))
+
+	#display_graph(g)
+	animate_walk(path)	

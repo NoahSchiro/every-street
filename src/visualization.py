@@ -71,3 +71,33 @@ def display_graph(g, heatmap=False):
 		nx.draw_networkx(nxg, node_pos, with_labels=False, edge_color='white', **options)
 
 	plt.show()
+
+def animate_walk(path):
+
+	# Imports needed for this
+	import numpy as np
+	from matplotlib.animation import FuncAnimation
+
+	# Output we will draw too
+	fig, ax = plt.subplots()
+	xdata, ydata = [], []
+
+	# This "line" will be used to plot our route
+	ln, = ax.plot([], [])
+
+	# I am setting these to the maximum coordinates of our route
+	def init():
+		ax.set_xlim(-76.882, -76.851)
+		ax.set_ylim(40.785, 40.814)
+		return ln,
+
+	def update(frame):
+		ydata.append(path[frame].lat_lon[0])
+		xdata.append(path[frame].lat_lon[1])
+		ln.set_data(xdata, ydata)
+		return ln,
+
+	ani = FuncAnimation(fig, update, interval=10, frames=range(len(path)), init_func=init, blit=True)
+
+	plt.show()
+
