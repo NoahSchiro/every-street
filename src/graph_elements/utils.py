@@ -1,6 +1,7 @@
 from graph_elements.graph import Graph
 from math import radians, cos, sin, asin, sqrt
 from matplotlib.path import Path
+from random import choice 
 
 def insort_right(a, x, lo=0, hi=None, *, key=None):
     
@@ -162,7 +163,9 @@ def point_in_polygon(g, file):
 # Accepts a graph, a starting node, and a
 # set of nodes to attempt to reach
 def bfs(G, start, targets):
-	
+
+	new_targets = [x for x in targets if x != start]
+
 	# Queue of nodes to explore
 	queue = []
 
@@ -189,7 +192,7 @@ def bfs(G, start, targets):
 
 		# If node happens to
 		# be what we are looking for
-		if node in targets:
+		if node in new_targets:
 			break
 
 		# [(Node, Absolute weight it takes to get there from start)]
@@ -225,7 +228,7 @@ def bfs(G, start, targets):
 
 def make_graph_eulerian(g):
 
-	# First we need to collect the off vertices	
+	# First we need to collect the odd vertices	
 	node_connections = []
 
 	# For each node
@@ -243,6 +246,38 @@ def make_graph_eulerian(g):
 	# Filter the node connections that are odd, remove the 
 	# number of connections they have, and put them into a set
 	odd_nodes = list(map(lambda x: x[0], filter(lambda x: x[1]%2==1, node_connections)))
+
+	# While their are intersections that are non-eulerian
+	while len(odd_nodes) > 0:
+
+		# Select a node at random
+		start_node = choice(odd_nodes)
+		path = bfs(g, start_node, odd_nodes)
+		end_node = path[0]
+		path_back = bfs(g, end_node, odd_nodes)
+
+		# If they both agree that they are the shortest node to each other
+		if start_node == path_back[0]:
+
+			# Now, for every connection in that path, we need to add it to
+			# the graph. This is effectively duplicating some edges
+			for i in range(len(path)-1):
+				n1 = path[i]
+				n2 = path[i+1]
+				g.add_edge(n1, n2)
+
+			odd_nodes.remove(start_node)
+			odd_nodes.remove(end_node)
+
+"""	
+	# (starting_node, ending_node, path itself, length of path)
+	paths_between_nodes = []
+
+	# Compute shortest paths for each odd_node
+	for node in odd_nodes:
+		path = bfs(g, node, odd_nodes)
+		paths_between_nodes.append((node, path[len(path)-1])) 	
+
 
 	# Now we can iterate through this set, and make new connections.
 	# Once a new connection is made, remove from set
@@ -264,6 +299,7 @@ def make_graph_eulerian(g):
 			g.add_edge(n1, n2)
 
 	# Graph is now eulerian
+"""
 
 # Takes a graph (as a dictionary) and generates the
 # Eulerian route (a list of nodes)
