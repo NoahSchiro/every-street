@@ -15,3 +15,5 @@ If we model every street and intersection as edges and nodes within a graph, the
 4. Next we need to modify the graph so that it is something called an "Eulerian circuit." I'm going to skip over the nerd theory here, though there will be a section later on that explains everything and I will show that this algorithm generates an optimal route. We might be curious how much overlap there will be in our route. What streets will we have to repeat twice? This will tell us where. Roads that are blue need to be traversed once, green twice, orange three times, and red four times:
 ![](./assets/heatmap.png)
 5. That looks pretty good! Actually, this algorithm is so efficient that the total length of all roads in Selinsgrove is about 65.4 km. This is the absolute minimum, and only possible if the roads are laid out in... a very convenient way. After making the graph Eulerian, it's only 90.3 km! That's only a 38% increase in the amount of road we need to cover!
+6. Finally, we generate the route.
+https://user-images.githubusercontent.com/59176275/221004213-891938ce-6760-4104-a30f-5975e94d1dc8.mp4
