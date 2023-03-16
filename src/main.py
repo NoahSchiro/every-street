@@ -111,6 +111,9 @@ if __name__=="__main__":
 		print("This takes a moment...")
 		display_graph(g, heatmap=True)	
 	elif option == "3":
-		animate_walk(path)	
+		# Optionally, you can set a speed of animation. Where "speed" is how long we display one frame of the animation
+		# bigger number -> slower
+		speed = 10
+		animate_walk(path, speed)	
 	else:
 		raise Exception("Not a valid option")
