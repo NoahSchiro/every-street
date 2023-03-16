@@ -72,7 +72,7 @@ def display_graph(g, heatmap=False):
 
 	plt.show()
 
-def animate_walk(path):
+def animate_walk(path, speed):
 
 	# Imports needed for this
 	import numpy as np
@@ -87,8 +87,24 @@ def animate_walk(path):
 
 	# I am setting these to the maximum coordinates of our route
 	def init():
-		ax.set_xlim(-76.882, -76.851)
-		ax.set_ylim(40.785, 40.814)
+
+		# Determine the min and max coordinates of the animation
+		lat_min = 360
+		lat_max = -360
+		lon_min = 360
+		lon_max = -360
+		for node in path:
+			lat_min = min(lat_min, node.lat_lon[0])
+			lat_max = max(lat_max, node.lat_lon[0])
+			lon_min = min(lon_min, node.lat_lon[1])
+			lon_max = max(lon_max, node.lat_lon[1])
+		
+		print("{}, {}".format(lat_min, lat_max))
+		print("{}, {}".format(lon_min, lon_max))
+
+		ax.set_xlim(lon_min, lon_max)
+		ax.set_ylim(lat_min, lat_max)
+
 		return ln,
 
 	def update(frame):
@@ -97,7 +113,7 @@ def animate_walk(path):
 		ln.set_data(xdata, ydata)
 		return ln,
 
-	ani = FuncAnimation(fig, update, interval=10, frames=range(len(path)), init_func=init, blit=True)
+	ani = FuncAnimation(fig, update, interval=speed, frames=range(len(path)), init_func=init, blit=True)
 
 	plt.show()
 
